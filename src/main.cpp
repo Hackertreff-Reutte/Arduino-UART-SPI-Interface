@@ -20,7 +20,7 @@ void  sendError(uint8_t category, uint8_t id, String text) {
   Serial.println("E:" + String(category, DEC) + ":" + String(id, DEC) + ":" + text);
 }
 
-
+//this function is used to send back the response you get from the spi controller / slave
 void sendRespone(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, String data){
   Serial.println("R:" + String(spi_id, DEC) + ":" + String(slave_id, DEC) + ":" + String(bitcount, DEC) + ":" + data);
 }

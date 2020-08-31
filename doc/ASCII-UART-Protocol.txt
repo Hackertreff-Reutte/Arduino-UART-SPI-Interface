@@ -1,0 +1,133 @@
+ASCII-<Name>-Protocol
+
+message-structure:
+	<Type-Symbol>:<type-spesific-content>
+	
+message-types:
+
+	C <- command-message
+	I <- info-message
+	W <- warning-message
+	E <- error-message
+	R <- response-message
+
+	
+command-message:
+
+	message-structure:
+		C:<command>:<command-spesific-content>
+		
+
+	commands:
+	
+		TX 	<- transfer
+		SE 	<- setup
+		ST  <- stop
+		BS	<- burst start
+		BE	<- burst end
+		BT	<- burst transfer
+		
+	
+	TX:
+	
+		message-structure:
+			C:TX:<spi-id>:<slave-id>:<bitcount>:<data>
+				<spi-id>: id of the spi controller
+				<slave-id>: id of the slave device
+				<bitcount>: amount of bits that will be tranfered
+				<data>: the data that will be send, must have the same bitcount as <bitcount>
+				
+		This command is used to transfer data to a specified slave device.
+		
+	
+	SE:
+	
+		message-structure:
+			C:SE:SPI:<spi-id>:<miso-pin>:<mosi-pin>:<clock-pin>:<mode>:<speed>
+			C:SE:MODE:<spi-id>:<mode>
+			C:SE:SPEED:<spi-id>:<speed>
+			C:SE:SLAVE:<slave-id>:<slave-pin>
+				<spi-id>: the id that will be / was assigned to the spi controller
+				<slave-id>: the id that will be / was assigned to the slave device
+				<miso-pin>: the pin on which the miso output of the uC is located (spi dependent)
+				<mosi-pin>: the pin on which the mosi output of the uC is located (spi dependent)
+				<clock-pin>: the pin on which the clock output of the uC is located (spi dependent)
+				<speed>: the speed which the spi controller should use to transfer data in Hz
+				<mode>: to the set tranfer mode (0,1,2,3)
+				
+					Mode	Clock Polarity (CPOL)	Clock Phase (CPHA)	Output Edge	Data Capture
+				   MODE 0			0						0				Falling	Rising
+				   MODE 1			0						1				Rising	Falling
+				   MODE 2			1						0				Rising	Falling
+				   MODE 3			1						1				Falling	Rising
+	
+		This command is used to setup and configure all the spi parameter.
+	
+	
+	ST:
+	
+		message-structure:
+			C:ST:<spi-id>
+				<spi-id>: the id of the spi that should be uninitialized.
+				
+		This command will bring the spi controller to its end. (need to be setup first if used again)
+
+
+	BS:
+		
+		message-structure:
+			C:BS:<spi-id>:<slave-id>
+				<spi-id>: id of the spi controller
+				<slave-id>: id of the slave device
+				
+		This will enable the burst read / write mode, defined in the si4432 datasheet
+		
+	BE:
+	
+		message-structure:
+			C:BS:<spi-id>:<slave-id>
+				<spi-id>: id of the spi controller
+				<slave-id>: id of the slave device
+				
+		This will disable the burst read / write mode, defined in the si4432 datasheet
+		
+		
+	BT:
+	
+		message-structure:
+			C:BT:<spi-id>:<slave-id>:<data>
+				<spi-id>: id of the spi controller
+				<slave-id>: id of the slave device
+				<data>: the data that will be send, must have a bitcount of 8 (per transfert 8bits of data)
+				
+
+info-message:
+
+	message-structure:
+		I:<info-text>
+			<info-text>: the text of the info
+			
+
+warning-message:
+
+	message-structure:
+		W:<warning-text>
+			<warning-text>: the text of the warning-message
+			
+error-message:
+	
+	message-structure:
+		E:<category>:<id>:<error-text>
+			<category>: the category which produced the error (see error manual)
+			<id>: id of the error (see error manual)
+			<error-text>: text that describes the error
+			
+
+response-message:
+
+	message-structure:
+		R:<spi-id>:<slave-id>:<bitcount>:<data>
+			<spi-id>: id of the spi controller
+			<slave-id>: id of the slave device
+			<bitcount>: the length of the data
+			<data>: the data that was read by the spi controller

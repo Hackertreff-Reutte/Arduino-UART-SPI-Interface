@@ -44,6 +44,7 @@ struct spicontroller {
   uint8_t speed;
   uint8_t bitorder;
   uint8_t mode; 
+  SPIClass spi;
   //all the slaves that are associated with the spi controller.
   slave slaves[8];
 };
@@ -53,31 +54,41 @@ struct spicontroller {
 spicontroller spicontrollers [4];
 
 
-void setupSPI(uint8_t id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint8_t speed, uint8_t bitorder, uint8_t mode){
+void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint8_t speed, uint8_t bitorder, uint8_t mode){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
 
   //check if the spi is already initialized
-  if(spicontrollers[id].initialized == true){
+  if(spicontrollers[spi_id].initialized == true){
     //TODO send error message 
     return;
   }
 
 
+  //ifdef to run diffrent code depending on the platform 
   #ifdef TARGET_ESP32
-    //init the spi for the esp (2) spies
-    SPI.begin(id, miso, mosi, -1);
+    //init the spi for the esp (2 SPIs)
+    spicontrollers[spi_id].spi = SPIClass(spi_id);
+    spicontrollers[spi_id].spi.begin(clock, miso, mosi, -1);
   #else
     //init the spi for arduino platforms
-    SPI.begin();
+    spicontrollers[spi_id].spi = SPI;
+    spicontrollers[spi_id].spi.begin();
   #endif
 
   //update the data of the spicontroller struct 
-  spicontrollers[id].miso = miso;
-  spicontrollers[id].mosi = mosi;
-  spicontrollers[id].clock = clock;
-  spicontrollers[id].speed = speed;
-  spicontrollers[id].bitorder = bitorder;
-  spicontrollers[id].mode = mode;
-  spicontrollers[id].initialized = true;
+  spicontrollers[spi_id].miso = miso;
+  spicontrollers[spi_id].mosi = mosi;
+  spicontrollers[spi_id].clock = clock;
+  spicontrollers[spi_id].speed = speed;
+  spicontrollers[spi_id].bitorder = bitorder;
+  spicontrollers[spi_id].mode = mode;
+  spicontrollers[spi_id].initialized = true;
 
 }
 

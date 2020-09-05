@@ -43,16 +43,17 @@ command-message:
 	SE:
 	
 		message-structure:
-			C:SE:SPI:<spi-id>:<miso-pin>:<mosi-pin>:<clock-pin>:<mode>:<speed>
+			C:SE:SPI:<spi-id>:<miso-pin>:<mosi-pin>:<clock-pin>:<mode>:<bitorder>:<speed>
 			C:SE:MODE:<spi-id>:<mode>
 			C:SE:SPEED:<spi-id>:<speed>
-			C:SE:SLAVE:<slave-id>:<slave-pin>
-				<spi-id>: the id that will be / was assigned to the spi controller
+			C:SE:SLAVE:<spi-id>:<slave-id>:<slave-pin>
+				<spi-id>: the id that will be / was assigned to the spi controller (beware this is predifiened like VSPI or HSPI (ESP32), if only one spi is present the id is 0)
 				<slave-id>: the id that will be / was assigned to the slave device
 				<miso-pin>: the pin on which the miso output of the uC is located (spi dependent)
 				<mosi-pin>: the pin on which the mosi output of the uC is located (spi dependent)
 				<clock-pin>: the pin on which the clock output of the uC is located (spi dependent)
 				<speed>: the speed which the spi controller should use to transfer data in Hz
+				<bitorder>: the bitorder of the transfer MSBFIRST (1) or LSBFIRST (0) 
 				<mode>: to the set tranfer mode (0,1,2,3)
 				
 					Mode	Clock Polarity (CPOL)	Clock Phase (CPHA)	Output Edge	Data Capture

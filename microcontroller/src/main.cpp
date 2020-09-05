@@ -116,11 +116,103 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
     return;
   }
 
+
   pinMode(pin, OUTPUT);
+
+  //set the pin high so that the slave is not selected
+  digitalWrite(pin, HIGH);
 
   spicontrollers[spi_id].slaves[slave_id].id = slave_id;
   spicontrollers[spi_id].slaves[slave_id].pin = pin;
   spicontrollers[spi_id].slaves[slave_id].initialized = true;
+  
+}
+
+
+uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t data){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  //slave_id bounds check
+  if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
+    //TODO send error slave_id out of bounds
+    return;
+  }
+
+  //check if the spi controller is initialized
+  if(spicontrollers[spi_id].initialized == false){
+    //TODO send error spi not inited
+    return;
+  }
+
+  //check if the slave is initialized
+  if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
+    //TODO send error slave not ready
+    return;
+  }
+
+
+  #ifdef TARGET_ESP32
+    if(bitcount != 8 || bitcount != 16 || bitcount != 32){
+      //TODO send error not legimate bitcount
+      return;
+    }
+  #else
+    //arduino uno only has a 16 bit spi buffer
+    if(bitcount != 8 || bitcount != 16){
+      //TODO send error not legimate bitcount
+      return;
+    }
+  #endif
+
+  
+
+  //activate the slave
+  digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, LOW);
+
+  //begin the transmission
+  spicontrollers[spi_id].spi.beginTransaction(SPISettings(spicontrollers[spi_id].speed, spicontrollers[spi_id].bitorder, spicontrollers[spi_id].mode));
+
+  uint32_t result = 0;
+
+  switch (bitcount) {
+    case 8:
+
+    //to eliminate all other bits (>8)
+    data = data & 0xF;
+    result = spicontrollers[spi_id].spi.transfer((uint8_t) data);
+
+    break;
+    case 16:
+
+    //to eliminate all other bits (>16)
+    data = data & 0xFF;
+    result = spicontrollers[spi_id].spi.transfer16((uint16_t) data);
+
+    break;
+
+    //only the esp32 has the function to transmitt 32bit of data 
+    #ifdef TARGET_ESP32
+      case 32:
+      //to eliminate all other bits (>32)
+      data = data & 0xFFFF;
+      result = spicontrollers[spi_id].spi.transfer32((uint32_t) data);
+      break;
+    #endif
+  }
+
+  //end the transmission
+  spicontrollers[spi_id].spi.endTransaction();
+
+  //disable the slave
+  digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, HIGH);
+
+  //return the result
+  return result;
   
 }
 

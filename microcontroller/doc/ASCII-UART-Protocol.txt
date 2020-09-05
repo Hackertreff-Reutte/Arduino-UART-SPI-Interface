@@ -47,7 +47,7 @@ command-message:
 			C:SE:MODE:<spi-id>:<mode>
 			C:SE:SPEED:<spi-id>:<speed>
 			C:SE:SLAVE:<spi-id>:<slave-id>:<slave-pin>
-				<spi-id>: the id that will be / was assigned to the spi controller (beware this is predifiened like VSPI or HSPI (ESP32), if only one spi is present the id is 0)
+				<spi-id>: the id that will be / was assigned to the spi controller (beware this is predifiened like VSPI or HSPI (ESP32), if only one spi is present the id should be 0) (esp32: HSPI = 2 / VSPI = 3)
 				<slave-id>: the id that will be / was assigned to the slave device
 				<miso-pin>: the pin on which the miso output of the uC is located (spi dependent)
 				<mosi-pin>: the pin on which the mosi output of the uC is located (spi dependent)

@@ -94,6 +94,18 @@ void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint8_
 
 void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
 
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  //slave_id bounds check
+  if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
+    //TODO send error slave_id out of bounds
+    return;
+  }
+
   if(spicontrollers[spi_id].initialized == false){
     //TODO return error spi not inited
     return;

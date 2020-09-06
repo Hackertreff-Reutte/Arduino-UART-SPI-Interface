@@ -41,7 +41,7 @@ struct spicontroller {
   uint8_t mosi;
   uint8_t miso;
   uint8_t clock;
-  uint8_t speed;
+  uint32_t speed;
   uint8_t bitorder;
   uint8_t mode; 
   SPIClass spi;
@@ -54,7 +54,7 @@ struct spicontroller {
 spicontroller spicontrollers [4];
 
 
-void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint8_t speed, uint8_t bitorder, uint8_t mode){
+void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32_t speed, uint8_t bitorder, uint8_t mode){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){

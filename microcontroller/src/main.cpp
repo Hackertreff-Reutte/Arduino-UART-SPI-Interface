@@ -154,6 +154,27 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
 }
 
 
+//NOTE: if the spi bus is stopped it keeps the config (config will not be reset)
+void stopSpi(uint8_t spi_id){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }  
+
+  if(spicontrollers[spi_id].initialized == false){
+    //TODO return error spi already stopped
+    return;
+  }
+
+
+  spicontrollers[spi_id].initialized = false;
+  spicontrollers[spi_id].spi.end();
+
+}
+
+
 uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t data){
 
   //spi_id bounds check

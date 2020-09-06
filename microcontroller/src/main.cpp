@@ -45,6 +45,8 @@ struct spicontroller {
   uint8_t bitorder;
   uint8_t mode; 
   SPIClass spi;
+  boolean transmitting = false;
+  uint8_t activeSlave = -1;
   //all the slaves that are associated with the spi controller.
   slave slaves[8];
 };
@@ -137,6 +139,12 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
     return;
   }
 
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == true){
+    //TODO send error can't change mode while transmitting / in transaction
+    return;
+  }
+
   spicontrollers[spi_id].mode = mode;
 
 }
@@ -147,6 +155,12 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
     //TODO send error spi_id out of bounds
+    return;
+  }
+
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == true){
+    //TODO send error can't change speed while transmitting / in transaction
     return;
   }
 
@@ -165,6 +179,12 @@ void stopSpi(uint8_t spi_id){
 
   if(spicontrollers[spi_id].initialized == false){
     //TODO return error spi already stopped
+    return;
+  }
+
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == true){
+    //TODO send error can't stop spi while transmitting / in transaction
     return;
   }
 
@@ -202,6 +222,13 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
   }
 
 
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == true){
+    //TODO send error can't start tranfer while already transmitting / in transaction
+    return 0;
+  }
+
+
   #ifdef TARGET_ESP32
     if(bitcount != 8 || bitcount != 16 || bitcount != 32){
       //TODO send error not legimate bitcount
@@ -215,13 +242,19 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     }
   #endif
 
+
+  //begin the transmission
+  spicontrollers[spi_id].spi.beginTransaction(SPISettings(spicontrollers[spi_id].speed, spicontrollers[spi_id].bitorder, spicontrollers[spi_id].mode));
+
+  spicontrollers[spi_id].transmitting = true;
   
 
   //activate the slave
   digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, LOW);
 
-  //begin the transmission
-  spicontrollers[spi_id].spi.beginTransaction(SPISettings(spicontrollers[spi_id].speed, spicontrollers[spi_id].bitorder, spicontrollers[spi_id].mode));
+  spicontrollers[spi_id].activeSlave = slave_id;
+
+  
 
   uint32_t result = 0;
 
@@ -251,15 +284,113 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     #endif
   }
 
-  //end the transmission
-  spicontrollers[spi_id].spi.endTransaction();
+  
 
   //disable the slave
   digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, HIGH);
+  
+  spicontrollers[spi_id].activeSlave = -1;
+
+
+  //end the transmission
+  spicontrollers[spi_id].spi.endTransaction();
+
+  spicontrollers[spi_id].transmitting = false;
 
   //return the result
   return result;
   
+}
+
+void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  //slave_id bounds check
+  if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
+    //TODO send error slave_id out of bounds
+    return;
+  }
+
+  //check if the spi controller is initialized
+  if(spicontrollers[spi_id].initialized == false){
+    //TODO send error spi not inited
+    return;
+  }
+
+  //check if the slave is initialized
+  if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
+    //TODO send error slave not ready
+    return;
+  }
+
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == true){
+    //TODO send error can't start tranfer while already transmitting / in transaction
+    return;
+  }
+
+
+  //begin the transmission
+  spicontrollers[spi_id].spi.beginTransaction(SPISettings(spicontrollers[spi_id].speed, spicontrollers[spi_id].bitorder, spicontrollers[spi_id].mode));
+
+  spicontrollers[spi_id].transmitting = true;
+
+  //activate the slave
+  digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, LOW);
+
+  spicontrollers[spi_id].activeSlave = slave_id;
+}
+
+
+
+void stopSpiBulkTransfer(uint8_t spi_id){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == false){
+    //TODO send error no transaction to end
+    return;
+  }
+
+  //deactivate the slave
+  digitalWrite(spicontrollers[spi_id].slaves[spicontrollers[spi_id].activeSlave].pin, HIGH);
+
+  spicontrollers[spi_id].activeSlave = -1;
+
+  //end the transmission
+  spicontrollers[spi_id].spi.endTransaction();
+
+  spicontrollers[spi_id].transmitting = false;
+
+}
+
+
+uint8_t bulkTransfer(uint8_t spi_id, uint8_t data){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return 0;
+  }
+
+  //check wether the spi is in a transaction or not
+  if(spicontrollers[spi_id].transmitting == false){
+    //TODO send error no active transaction
+    return 0;
+  }
+
+  return spicontrollers[spi_id].spi.transfer(data);
+
 }
 
 //--------------Serial Communication Parser-----------------------

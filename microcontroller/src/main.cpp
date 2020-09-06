@@ -134,38 +134,38 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
     //TODO send error spi_id out of bounds
-    return;
+    return 0;
   }
 
   //slave_id bounds check
   if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
     //TODO send error slave_id out of bounds
-    return;
+    return 0;
   }
 
   //check if the spi controller is initialized
   if(spicontrollers[spi_id].initialized == false){
     //TODO send error spi not inited
-    return;
+    return 0;
   }
 
   //check if the slave is initialized
   if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
     //TODO send error slave not ready
-    return;
+    return 0;
   }
 
 
   #ifdef TARGET_ESP32
     if(bitcount != 8 || bitcount != 16 || bitcount != 32){
       //TODO send error not legimate bitcount
-      return;
+      return 0;
     }
   #else
     //arduino uno only has a 16 bit spi buffer
     if(bitcount != 8 || bitcount != 16){
       //TODO send error not legimate bitcount
-      return;
+      return 0;
     }
   #endif
 

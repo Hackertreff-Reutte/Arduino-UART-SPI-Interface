@@ -129,6 +129,31 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
 }
 
 
+void updateSpiMode(uint8_t spi_id, uint8_t mode) {
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  spicontrollers[spi_id].mode = mode;
+
+}
+
+
+void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
+
+  //spi_id bounds check
+  if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
+    //TODO send error spi_id out of bounds
+    return;
+  }
+
+  spicontrollers[spi_id].speed = speed;
+}
+
+
 uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t data){
 
   //spi_id bounds check

@@ -86,9 +86,8 @@ command-message:
 	BE:
 	
 		message-structure:
-			C:BS:<spi-id>:<slave-id>
+			C:BS:<spi-id>
 				<spi-id>: id of the spi controller
-				<slave-id>: id of the slave device
 				
 		This will disable the burst read / write mode, defined in the si4432 datasheet
 		
@@ -96,9 +95,8 @@ command-message:
 	BT:
 	
 		message-structure:
-			C:BT:<spi-id>:<slave-id>:<data>
+			C:BT:<spi-id>:<data>
 				<spi-id>: id of the spi controller
-				<slave-id>: id of the slave device
 				<data>: the data that will be send, must have a bitcount of 8 (per transfert 8bits of data)
 				
 

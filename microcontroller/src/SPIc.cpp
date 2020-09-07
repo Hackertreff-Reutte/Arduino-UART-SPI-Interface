@@ -238,14 +238,20 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     case 8:
 
     //to eliminate all other bits (>8)
-    data = data & 0xFF;
+
+    if(data & 0xFFFFFF00 > 0){
+      //TODO error data is bigger than 8 bit
+    }
+
     result = spicontrollers[spi_id].spi.transfer((uint8_t) data);
 
     break;
     case 16:
 
-    //to eliminate all other bits (>16)
-    data = data & 0xFFFF;
+    if(data & 0xFFFF0000 > 0){
+      //TODO error data is bigger than 16 bit
+    }
+
     result = spicontrollers[spi_id].spi.transfer16((uint16_t) data);
 
     break;
@@ -253,8 +259,6 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     //only the esp32 has the function to transmitt 32bit of data 
     #ifdef TARGET_ESP32
       case 32:
-      //to eliminate all other bits (>32)
-      data = data & 0xFFFFFFFF;
       result = spicontrollers[spi_id].spi.transfer32((uint32_t) data);
       break;
     #endif

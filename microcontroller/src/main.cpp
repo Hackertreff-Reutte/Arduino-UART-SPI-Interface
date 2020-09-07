@@ -1,8 +1,11 @@
 #include <Arduino.h>
 
+//this ifndef is just here for a script to create a single main file (used by the arduino ide) and to not include non-existend files 
 #ifndef ARDUINO_IDE
 #include "SPIc.h"
 #endif
+
+
 
 //----------------Serial Communication Functions-------------------
 
@@ -20,8 +23,14 @@ void sendWarning(String text) {
 
 //this function will send an error message with a given category and id
 //for the categories and ids please look at the doc
-void  sendError(uint8_t category, uint8_t id, String text) {
-  Serial.println("E:" + String(category, DEC) + ":" + String(id, DEC) + ":" + text);
+void sendError(String category, uint8_t id) {
+  Serial.println("E:" + category + ":" + String(id, DEC));
+}
+
+//this function will send an error message with a given category, id and text
+//for the categories and ids please look at the doc
+void sendError(String category, uint8_t id, String text) {
+  Serial.println("E:" + category + ":" + String(id, DEC) + ":" + text);
 }
 
 //this function is used to send back the response you get from the spi controller / slave

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 
+//this ifndef is just here for a script to create a single main file (used by the arduino ide) and to not include non-existend files 
 #ifndef ARDUINO_IDE
 #include "SPIc.h"
 #endif
@@ -205,13 +206,13 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
 
 
   #ifdef TARGET_ESP32
-    if(bitcount != 8 || bitcount != 16 || bitcount != 32){
+    if(bitcount != 8 && bitcount != 16 && bitcount != 32){
       //TODO send error not legimate bitcount
       return 0;
     }
   #else
     //arduino uno only has a 16 bit spi buffer
-    if(bitcount != 8 || bitcount != 16){
+    if(bitcount != 8 && bitcount != 16){
       //TODO send error not legimate bitcount
       return 0;
     }
@@ -237,14 +238,14 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     case 8:
 
     //to eliminate all other bits (>8)
-    data = data & 0xF;
+    data = data & 0xFF;
     result = spicontrollers[spi_id].spi.transfer((uint8_t) data);
 
     break;
     case 16:
 
     //to eliminate all other bits (>16)
-    data = data & 0xFF;
+    data = data & 0xFFFF;
     result = spicontrollers[spi_id].spi.transfer16((uint16_t) data);
 
     break;
@@ -253,7 +254,7 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     #ifdef TARGET_ESP32
       case 32:
       //to eliminate all other bits (>32)
-      data = data & 0xFFFF;
+      data = data & 0xFFFFFFFF;
       result = spicontrollers[spi_id].spi.transfer32((uint32_t) data);
       break;
     #endif

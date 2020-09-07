@@ -1,0 +1,16 @@
+Error Codes
+
+categories:
+	SYSTEM
+	PARSER
+	SPI
+	SDCARD
+	
+	
+SYSTEM:
+	0	->	example error
+PARSER:
+
+SPI:
+
+SDCARD:

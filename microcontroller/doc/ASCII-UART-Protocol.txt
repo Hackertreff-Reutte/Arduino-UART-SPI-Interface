@@ -117,9 +117,10 @@ error-message:
 	
 	message-structure:
 		E:<category>:<id>:<error-text>
+		E:<category>:<id>
 			<category>: the category which produced the error (see error manual)
 			<id>: id of the error (see error manual)
-			<error-text>: text that describes the error
+			<error-text>: text that describes the error [only debug]
 			
 
 response-message:

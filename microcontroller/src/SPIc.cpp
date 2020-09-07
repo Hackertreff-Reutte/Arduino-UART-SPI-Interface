@@ -239,7 +239,7 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
 
     //to eliminate all other bits (>8)
 
-    if(data & 0xFFFFFF00 > 0){
+    if((data & 0xFFFFFF00) > 0){
       //TODO error data is bigger than 8 bit
     }
 
@@ -248,7 +248,7 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     break;
     case 16:
 
-    if(data & 0xFFFF0000 > 0){
+    if((data & 0xFFFF0000) > 0){
       //TODO error data is bigger than 16 bit
     }
 

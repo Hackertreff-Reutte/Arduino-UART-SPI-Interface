@@ -1,7 +1,7 @@
 ASCII-<Name>-Protocol
 
 message-structure:
-	<Type-Symbol>:<type-spesific-content>
+	<Type-Symbol>:<type-specific-content>
 	
 message-types:
 
@@ -15,7 +15,7 @@ message-types:
 command-message:
 
 	message-structure:
-		C:<command>:<command-spesific-content>
+		C:<command>:<command-specific-content>
 		
 
 	commands:

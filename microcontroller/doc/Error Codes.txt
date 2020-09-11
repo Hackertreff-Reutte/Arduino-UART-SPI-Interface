@@ -10,6 +10,11 @@ categories:
 SYSTEM:
 	0	->	example error
 PARSER:
+	P0	-> Empty data string
+	P1	-> Invalid command type
+	P2	-> Command fields missing
+	P3	-> Bitcount mismatch
+	P4	-> Invalid setup command
 
 SPI:
 

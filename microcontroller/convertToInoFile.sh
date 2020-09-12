@@ -11,6 +11,25 @@ echo "//This is a guard so that the code works with the Arduino IDE !!!Do not re
 echo "#define ARDUINO_IDE" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 
+#add the settings to the arduino file
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "//---------Start of the contents from the file settings.h------------" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "//In this section can you tweak the settings a bit:" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+
+cat ./src/settings.h &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "//---------End of the contents from the file settings.h------------" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+
+
+#loop through all the files and add them to the newly created ino file 
 FILES=./src/*
 for file in $FILES
 do

@@ -41,19 +41,23 @@ void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
+
     return;
   }
 
 
   //check if the spi is already initialized
   if(spicontrollers[spi_id].initialized == true){
-    //TODO send error message 
+    
+    //send error message SPI is already initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED, SPI_ALREADY_INITIALIZED_TEXT);
+    #endif
+
     return;
   }
 
@@ -89,11 +93,7 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR_TEXT);
     #endif
 
     return;
@@ -101,17 +101,38 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
 
   //slave_id bounds check
   if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
-    //TODO send error slave_id out of bounds
+    
+    //send error message SPI slave id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+    #endif
+
     return;
   }
 
   if(spicontrollers[spi_id].initialized == false){
-    //TODO return error spi not inited
+    
+    //send error message SPI is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED, SPI_NOT_INITIALIZED_TEXT);
+    #endif
+    
     return;
   }
 
   if(spicontrollers[spi_id].slaves[slave_id].initialized == true){
-    //TODO return error slave already inited
+    
+    //send error message SPI slave already initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_ALREADY_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_ALREADY_INITIALIZED, SPI_SLAVE_ALREADY_INITIALIZED_TEXT);
+    #endif
+
     return;
   }
 
@@ -137,11 +158,7 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return;
@@ -149,7 +166,14 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == true){
-    //TODO send error can't change mode while transmitting / in transaction
+    
+    //send error message due to being in a transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR, SPI_IS_IN_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return;
   }
 
@@ -167,11 +191,7 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return;
@@ -179,7 +199,14 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == true){
-    //TODO send error can't change speed while transmitting / in transaction
+    
+    //send error message due to being in a transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR, SPI_IS_IN_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return;
   }
 
@@ -197,24 +224,34 @@ void stopSpi(uint8_t spi_id){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return;
   }  
 
   if(spicontrollers[spi_id].initialized == false){
-    //TODO return error spi already stopped
+    
+    //send error message SPI is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED, SPI_NOT_INITIALIZED_TEXT);
+    #endif
+
     return;
   }
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == true){
-    //TODO send error can't stop spi while transmitting / in transaction
+    
+    //send error message due to being in a transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR, SPI_IS_IN_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return;
   }
 
@@ -234,11 +271,7 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return 0;
@@ -246,39 +279,81 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
 
   //slave_id bounds check
   if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
-    //TODO send error slave_id out of bounds
+    
+    //send error message SPI slave id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+    #endif
+
     return 0;
   }
 
   //check if the spi controller is initialized
   if(spicontrollers[spi_id].initialized == false){
-    //TODO send error spi not inited
+    
+    //send error message SPI is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED, SPI_NOT_INITIALIZED_TEXT);
+    #endif
+
     return 0;
   }
 
   //check if the slave is initialized
   if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
-    //TODO send error slave not ready
+    
+    //send error message SPI slave is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_NOT_INITIALIZED, SPI_SLAVE_NOT_INITIALIZED_TEXT);
+    #endif
+
     return 0;
   }
 
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == true){
-    //TODO send error can't start tranfer while already transmitting / in transaction
+    
+    //send error message due to being in a transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR, SPI_IS_IN_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return 0;
   }
 
 
   #ifdef TARGET_ESP32
     if(bitcount != 8 && bitcount != 16 && bitcount != 32){
-      //TODO send error not legimate bitcount
+      
+      //send error message invalid bitcount
+      #ifndef DEBUG
+        sendError(SPI_ERROR, SPI_INVALID_BITCOUNT_ERROR);
+      #else
+        sendError(SPI_ERROR, SPI_INVALID_BITCOUNT_ERROR, SPI_INVALID_BITCOUNT_ERROR_TEXT);
+      #endif
+
       return 0;
     }
   #else
     //arduino uno only has a 16 bit spi buffer
     if(bitcount != 8 && bitcount != 16){
-      //TODO send error not legimate bitcount
+      
+      //send error message invalid bitcount
+      #ifndef DEBUG
+        sendError(SPI_ERROR, SPI_INVALID_BITCOUNT_ERROR);
+      #else
+        sendError(SPI_ERROR, SPI_INVALID_BITCOUNT_ERROR, SPI_INVALID_BITCOUNT_ERROR_TEXT);
+      #endif
+
       return 0;
     }
   #endif
@@ -302,23 +377,12 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
   switch (bitcount) {
     case 8:
 
-    //to eliminate all other bits (>8)
-
-    if((data & 0xFFFFFF00) > 0){
-      //TODO error data is bigger than 8 bit
-    }
-
     result = spicontrollers[spi_id].spi.transfer((uint8_t) data);
-
     break;
+
     case 16:
 
-    if((data & 0xFFFF0000) > 0){
-      //TODO error data is bigger than 16 bit
-    }
-
     result = spicontrollers[spi_id].spi.transfer16((uint16_t) data);
-
     break;
 
     //only the esp32 has the function to transmitt 32bit of data 
@@ -356,11 +420,7 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return;
@@ -368,25 +428,53 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
 
   //slave_id bounds check
   if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
-    //TODO send error slave_id out of bounds
+    
+    //send error message SPI slave id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR, SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+    #endif
+
     return;
   }
 
   //check if the spi controller is initialized
   if(spicontrollers[spi_id].initialized == false){
-    //TODO send error spi not inited
+    
+    //send error message SPI is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED, SPI_NOT_INITIALIZED_TEXT);
+    #endif
+
     return;
   }
 
   //check if the slave is initialized
   if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
-    //TODO send error slave not ready
+    
+    //send error message SPI slave is not initialized
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_SLAVE_NOT_INITIALIZED);
+    #else
+      sendError(SPI_ERROR, SPI_SLAVE_NOT_INITIALIZED, SPI_SLAVE_NOT_INITIALIZED_TEXT);
+    #endif
+
     return;
   }
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == true){
-    //TODO send error can't start tranfer while already transmitting / in transaction
+    
+    //send error message due to being in a transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_IS_IN_TRANSACTION_ERROR, SPI_IS_IN_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return;
   }
 
@@ -413,11 +501,7 @@ void stopSpiBulkTransfer(uint8_t spi_id){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return;
@@ -425,7 +509,14 @@ void stopSpiBulkTransfer(uint8_t spi_id){
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == false){
-    //TODO send error no transaction to end
+   
+    //send error there is no active transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return;
   }
 
@@ -451,11 +542,7 @@ uint8_t bulkTransfer(uint8_t spi_id, uint8_t data){
     #ifndef DEBUG
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
     #else
-<<<<<<< HEAD
-      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
-=======
       sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
->>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
     #endif
 
     return 0;
@@ -463,7 +550,14 @@ uint8_t bulkTransfer(uint8_t spi_id, uint8_t data){
 
   //check wether the spi is in a transaction or not
   if(spicontrollers[spi_id].transmitting == false){
-    //TODO send error no active transaction
+    
+    //send error there is no active transaction
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR, SPI_NO_ACTIVE_TRANSACTION_ERROR_TEXT);
+    #endif
+
     return 0;
   }
 

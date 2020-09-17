@@ -18,5 +18,13 @@ PARSER:
 
 SPI:
 	0	->	SPI ID is out of bounds
+	1	->	SPI Slave ID is out of bounds
+	2	-> 	SPI already initialized
+	3	->	SPI not initialized
+	4	->	SPI slave not initialized
+	5	->	SPI slave already initialized
+	6	->	SPI Error due to the SPI being in a transaction
+	7	->	Error there is no active transaction
+	8	->	Error not a vaild bitcount
 
 SDCARD:

@@ -36,7 +36,17 @@ void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
     return;
   }
 
@@ -74,7 +84,18 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }
 
@@ -111,7 +132,18 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }
 
@@ -130,7 +162,18 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }
 
@@ -149,7 +192,18 @@ void stopSpi(uint8_t spi_id){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }  
 
@@ -175,7 +229,18 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return 0;
   }
 
@@ -286,7 +351,18 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }
 
@@ -332,7 +408,18 @@ void stopSpiBulkTransfer(uint8_t spi_id){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return;
   }
 
@@ -359,7 +446,18 @@ uint8_t bulkTransfer(uint8_t spi_id, uint8_t data){
 
   //spi_id bounds check
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
-    //TODO send error spi_id out of bounds
+    
+    //send error message SPI id out of bounds
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR);
+    #else
+<<<<<<< HEAD
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT)
+=======
+      sendError(SPI_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR, SPI_ID_OUT_OF_BOUNDS_ERROR_TEXT);
+>>>>>>> added some error reporting to the SPIc file (uart sendError) (spi id out of bounds)
+    #endif
+
     return 0;
   }
 

@@ -10,12 +10,13 @@ categories:
 SYSTEM:
 	0	->	example error
 PARSER:
-	P0	-> Empty data string
-	P1	-> Invalid command type
-	P2	-> Command fields missing
-	P3	-> Bitcount mismatch
-	P4	-> Invalid setup command
+	0	-> 	Empty data string
+	1	-> 	Invalid command type
+	2	-> 	Command fields missing
+	3	-> 	Bitcount mismatch
+	4	-> 	Invalid setup command
 
 SPI:
+	0	->	SPI ID is out of bounds
 
 SDCARD:

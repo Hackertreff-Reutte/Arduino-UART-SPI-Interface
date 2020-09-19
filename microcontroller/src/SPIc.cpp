@@ -35,7 +35,7 @@ spicontroller spicontrollers [4];
 //---------------------error checks------------------------
 
 bool isSPI_ID_inBounds(uint8_t spi_id){
-  //spi_id bounds check
+  //spi_id bounds check (checks if the spi id is not bigger than the spi array, if it is this function will send an error)
   if(spi_id >= sizeof(spicontrollers)/sizeof(spicontrollers[0])){
     
     //send error message SPI id out of bounds
@@ -52,7 +52,7 @@ bool isSPI_ID_inBounds(uint8_t spi_id){
 }
 
 bool isSPI_notInitialized(uint8_t spi_id){
-  //check if the spi is already initialized
+  //check if the spi is already initialized (if it is this function will send a error)
   if(spicontrollers[spi_id].initialized == true){
     
     //send error message SPI is already initialized
@@ -69,7 +69,7 @@ bool isSPI_notInitialized(uint8_t spi_id){
 }
 
 bool isSPI_Initialized(uint8_t spi_id){
-  //check if the spi is already initialized
+  //check if the spi is initialized (if it is not this function will send a error)
   if(spicontrollers[spi_id].initialized == true){
     
     //send error message SPI is already initialized
@@ -87,7 +87,7 @@ bool isSPI_Initialized(uint8_t spi_id){
 
 
 bool isSPI_Slave_inBounds(uint8_t spi_id, uint8_t slave_id){
-  //slave_id bounds check
+  //slave_id bounds check (checks if the slave id is not bigger than the slave array, if it is this function will send an error)
   if(slave_id >= sizeof(spicontrollers[spi_id].slaves) / sizeof(spicontrollers[spi_id].slaves[0])){
     
     //send error message SPI slave id out of bounds
@@ -121,7 +121,7 @@ bool isSPI_Slave_notInitialized(uint8_t spi_id, uint8_t slave_id){
 }
 
 bool isSPI_Slave_Initialized(uint8_t spi_id, uint8_t slave_id){
-  //check if the slave is initialized
+  //check if the slave is initialized, if not this function will send a error
   if(spicontrollers[spi_id].slaves[slave_id].initialized == false){
     
     //send error message SPI slave is not initialized
@@ -138,7 +138,7 @@ bool isSPI_Slave_Initialized(uint8_t spi_id, uint8_t slave_id){
 }
 
 bool isSPI_notTransmitting(uint8_t spi_id){
-  //check if the spi has a active transaction (if yes = error)
+  //check if the spi has no active transaction (if yes (has active transaction) = error)
   if(spicontrollers[spi_id].transmitting == true){
     
     //send error message due to being in a transaction
@@ -173,7 +173,7 @@ bool isSPI_Transmitting(uint8_t spi_id){
 
 bool isValidBitCount(uint8_t bitcount){
 
-  //check if the bitcount is valid
+  //check if the bitcount is valid, if not this function will send a error
 
   #ifdef TARGET_ESP32
     if(bitcount != 8 && bitcount != 16 && bitcount != 32){
@@ -321,7 +321,7 @@ void stopSpi(uint8_t spi_id){
   }
 
   //check if the spi is initialized
-  if(isSPI_notInitialized(spi_id) == false){
+  if(isSPI_Initialized(spi_id) == false){
     return;
   }
 
@@ -350,7 +350,7 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
   }
 
   //check if the spi is initialized
-  if(isSPI_notInitialized(spi_id) == false){
+  if(isSPI_Initialized(spi_id) == false){
     return 0;
   }
 
@@ -359,12 +359,10 @@ uint32_t transfer(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t d
     return 0;
   }
 
-
   //check if the spi free and not transmitting
   if(isSPI_notTransmitting(spi_id) == false){
     return 0;
   }
-
 
   //check if the bitcount is valid
   if(isValidBitCount(bitcount) == false){
@@ -437,7 +435,7 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
   }
 
   //check if the spi is initialized
-  if(isSPI_notInitialized(spi_id) == false){
+  if(isSPI_Initialized(spi_id) == false){
     return;
   }
 

@@ -17,7 +17,19 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id);
 void stopSpiBulkTransfer(uint8_t spi_id);
 uint8_t bulkTransfer(uint8_t spi_id, uint8_t data);
 
-//there are some private function for bound checks and so on and i am not sure if i should add them
+//there are some private function for bound checks
+//this is an importanted guard for the unit testing framework (otherwise multiple definitions)
+#ifdef UNIT_TEST 
+bool isSPI_ID_inBounds(uint8_t spi_id);
+bool isSPI_notInitialized(uint8_t spi_id);
+bool isSPI_Initialized(uint8_t spi_id);
+bool isSPI_Slave_inBounds(uint8_t spi_id, uint8_t slave_id);
+bool isSPI_Slave_notInitialized(uint8_t spi_id, uint8_t slave_id);
+bool isSPI_Slave_Initialized(uint8_t spi_id, uint8_t slave_id);
+bool isSPI_notTransmitting(uint8_t spi_id);
+bool isSPI_Transmitting(uint8_t spi_id);
+bool isValidBitCount(uint8_t bitcount);
+#endif
 
 
 #endif

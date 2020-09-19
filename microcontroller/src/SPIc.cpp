@@ -24,12 +24,12 @@ struct spicontroller {
   boolean transmitting = false;
   uint8_t activeSlave = -1;
   //all the slaves that are associated with the spi controller.
-  slave slaves[8];
+  slave slaves[NUMBER_OF_SLAVES_PER_SPI];
 };
 
 
 //array where all the spicontrollers are saved
-spicontroller spicontrollers [4];
+spicontroller spicontrollers [SIZE_OF_SPICONTROLLER_ARRAY];
 
 
 //---------------------error checks------------------------

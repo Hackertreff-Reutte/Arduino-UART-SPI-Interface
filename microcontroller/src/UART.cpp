@@ -30,6 +30,11 @@ void sendWarning(String text) {
 //for the categories and ids please look at the doc
 void sendError(String category, uint8_t id) {
   Serial.println("E:" + category + ":" + String(id, DEC));
+
+  //this is for the unit test framework to check error messages
+  #ifdef UNIT_TEST 
+    uinittest_logError(category, id);
+  #endif
 }
 
 
@@ -39,6 +44,11 @@ void sendError(String category, uint8_t id) {
 //for the categories and ids please look at the doc
 void sendError(String category, uint8_t id, String text) {
   Serial.println("E:" + category + ":" + String(id, DEC) + ":" + text);
+
+  //this is for the unit test framework to check error messages
+  #ifdef UNIT_TEST 
+    uinittest_logError(category, id);
+  #endif
 }
 #endif
 

@@ -10,6 +10,9 @@
 
 
 
+//this is an importanted guard for the unit testing framework (otherwise multiple definitions)
+#ifndef UNIT_TEST 
+
 void setup() {
 
 
@@ -18,3 +21,5 @@ void setup() {
 void loop() {
   
 }
+
+#endif

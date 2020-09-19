@@ -5,6 +5,12 @@
 #include "settings.h"
 #include "errorcodes.h"
 
+//header for the testing framework
+#ifdef UNIT_TEST 
+    //needed to get the error report of the spi functions
+    #include "unittest_UART_interceptor.h"
+#endif
+
 
 //only usable if debug is defined 
 #ifdef DEBUG

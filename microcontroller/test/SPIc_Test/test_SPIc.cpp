@@ -59,6 +59,119 @@ void test_SPI_BoundsAndBitcountChecks(){
 }
 
 
+void test_SPI_InitializedChecks(){
+
+    //this function will the the spi initialized check with the help 
+    //of the SPIsetup() function
+
+    if(SIZE_OF_SPICONTROLLER_ARRAY < 3){
+       TEST_FAIL_MESSAGE("SIZE_OF_SPICONTROLLER_ARRAY have to be 3 or bigger");
+    }
+
+    //make sure the spi 2 is stopped
+    stopSpi(2);
+    uinittest_resetErrorUpdatedStatus();
+
+    //TODO check if this works
+    //should work (no error)
+    setupSPI(2,0,0,0,0,0,0);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    setupSPI(2,0,0,0,0,0,0);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_ALREADY_INITIALIZED_ERROR, uinittest_getLastErrorID());
+
+}
+
+
+void test_SPI_Slave_InitializedChecks(){
+
+    //this function will the the spi slave initialized check with the help 
+    //of the SPIsetup() and setupSlave() and transfer() functions
+
+    if(SIZE_OF_SPICONTROLLER_ARRAY < 3){
+       TEST_FAIL_MESSAGE("SIZE_OF_SPICONTROLLER_ARRAY have to be 3 or bigger");
+    }
+
+    if(NUMBER_OF_SLAVES_PER_SPI < 3){
+       TEST_FAIL_MESSAGE("NUMBER_OF_SLAVES_PER_SPI have to be 3 or bigger");
+    }
+
+     //make sure the spi 2 is stopped
+    stopSpi(2);
+    uinittest_resetErrorUpdatedStatus();
+    setupSPI(2,0,0,0,0,0,0);
+    transfer(2,2,8,0);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_SLAVE_NOT_INITIALIZED, uinittest_getLastErrorID());
+    uinittest_resetErrorUpdatedStatus();
+    setupSlave(2,2,0);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    transfer(2,2,8,0);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    setupSlave(2,2,0);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_SLAVE_ALREADY_INITIALIZED, uinittest_getLastErrorID());
+
+    stopSpi(1);
+    uinittest_resetErrorUpdatedStatus();
+
+    TEST_ASSERT_TRUE(isSPI_notInitialized(1));
+    TEST_ASSERT_TRUE(isSPI_Initialized(2));
+    TEST_ASSERT_TRUE(isSPI_Slave_notInitialized(2,0));
+    TEST_ASSERT_TRUE(isSPI_Slave_Initialized(2,2));
+
+}
+
+
+void test_SPI_transmittingChecks(){
+
+    //this function will the the spi transfer check with the help 
+    //of the SPIsetup(), setupSlave(), startSpiBulkTransfer(), stopSpiBulkTransfer(), transfer functions
+
+    if(SIZE_OF_SPICONTROLLER_ARRAY < 3){
+       TEST_FAIL_MESSAGE("SIZE_OF_SPICONTROLLER_ARRAY have to be 3 or bigger");
+    }
+
+    if(NUMBER_OF_SLAVES_PER_SPI < 3){
+       TEST_FAIL_MESSAGE("NUMBER_OF_SLAVES_PER_SPI have to be 3 or bigger");
+    }
+
+    setupSPI(2,0,0,0,0,0,0);
+    setupSlave(2,2,0);
+    stopSpiBulkTransfer(2);
+    uinittest_resetErrorUpdatedStatus();
+
+    TEST_ASSERT_TRUE(isSPI_notTransmitting(2));
+    startSpiBulkTransfer(2,2);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_TRUE(isSPI_Transmitting(2));
+    startSpiBulkTransfer(2,2);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_IS_IN_TRANSACTION_ERROR, uinittest_getLastErrorID());
+
+    uinittest_resetErrorUpdatedStatus();
+    transfer(2,2,8,0);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_IS_IN_TRANSACTION_ERROR, uinittest_getLastErrorID());
+
+    uinittest_resetErrorUpdatedStatus();
+
+    bulkTransfer(2,0);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+
+    stopSpiBulkTransfer(2);
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    stopSpiBulkTransfer(2);
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_NO_ACTIVE_TRANSACTION_ERROR, uinittest_getLastErrorID());
+}
+
 
 
 void setup(){
@@ -66,7 +179,11 @@ void setup(){
     UNITY_BEGIN();    // IMPORTANT LINE!
 
     RUN_TEST(test_SPI_BoundsAndBitcountChecks);
+    RUN_TEST(test_SPI_InitializedChecks);
+    RUN_TEST(test_SPI_Slave_InitializedChecks);
+    RUN_TEST(test_SPI_transmittingChecks);
     
+    //TODO: add more checks if necessary
 
     UNITY_END(); // stop unit testing
 }

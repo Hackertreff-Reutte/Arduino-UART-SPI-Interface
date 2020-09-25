@@ -8,7 +8,6 @@
 
 struct slave {
   boolean initialized = false;
-  uint8_t id;
   uint8_t pin;
 };
 
@@ -57,9 +56,9 @@ bool isSPI_notInitialized(uint8_t spi_id){
     
     //send error message SPI is already initialized
     #ifndef DEBUG
-      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED);
+      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED_ERROR);
     #else
-      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED, SPI_ALREADY_INITIALIZED_TEXT);
+      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED_ERROR, SPI_ALREADY_INITIALIZED_ERROR_TEXT);
     #endif
 
     return false;
@@ -70,13 +69,13 @@ bool isSPI_notInitialized(uint8_t spi_id){
 
 bool isSPI_Initialized(uint8_t spi_id){
   //check if the spi is initialized (if it is not this function will send a error)
-  if(spicontrollers[spi_id].initialized == true){
+  if(spicontrollers[spi_id].initialized == false){
     
     //send error message SPI is already initialized
     #ifndef DEBUG
-      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED);
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED_ERROR);
     #else
-      sendError(SPI_ERROR, SPI_ALREADY_INITIALIZED, SPI_ALREADY_INITIALIZED_TEXT);
+      sendError(SPI_ERROR, SPI_NOT_INITIALIZED_ERROR, SPI_NOT_INITIALIZED_ERROR_TEXT);
     #endif
 
     return false;
@@ -202,7 +201,7 @@ bool isValidBitCount(uint8_t bitcount){
 
       return false;
     }else{
-      true
+      return true;
     }
   #endif
 }
@@ -272,7 +271,6 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
   //set the pin high so that the slave is not selected
   digitalWrite(pin, HIGH);
 
-  spicontrollers[spi_id].slaves[slave_id].id = slave_id;
   spicontrollers[spi_id].slaves[slave_id].pin = pin;
   spicontrollers[spi_id].slaves[slave_id].initialized = true;
   
@@ -333,6 +331,15 @@ void stopSpi(uint8_t spi_id){
 
   spicontrollers[spi_id].initialized = false;
   spicontrollers[spi_id].spi.end();
+
+
+  int numberOfSlaves = sizeof(spicontrollers[spi_id].slaves)/sizeof(spicontrollers[spi_id].slaves[0]);
+  for(int i = 0; i < numberOfSlaves; i++){
+    if(spicontrollers[spi_id].slaves[i].initialized){
+      spicontrollers[spi_id].slaves[i].initialized = false;
+      spicontrollers[spi_id].slaves[i].pin = 0;
+    }
+  }
 
 }
 

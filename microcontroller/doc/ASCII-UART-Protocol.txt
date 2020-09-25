@@ -1,7 +1,7 @@
 ASCII-<Name>-Protocol
 
 message-structure:
-	<Type-Symbol>:<type-spesific-content>
+	<Type-Symbol>:<type-specific-content>
 	
 message-types:
 
@@ -15,7 +15,7 @@ message-types:
 command-message:
 
 	message-structure:
-		C:<command>:<command-spesific-content>
+		C:<command>:<command-specific-content>
 		
 
 	commands:
@@ -43,16 +43,17 @@ command-message:
 	SE:
 	
 		message-structure:
-			C:SE:SPI:<spi-id>:<miso-pin>:<mosi-pin>:<clock-pin>:<mode>:<speed>
+			C:SE:SPI:<spi-id>:<miso-pin>:<mosi-pin>:<clock-pin>:<mode>:<bitorder>:<speed>
 			C:SE:MODE:<spi-id>:<mode>
 			C:SE:SPEED:<spi-id>:<speed>
-			C:SE:SLAVE:<slave-id>:<slave-pin>
-				<spi-id>: the id that will be / was assigned to the spi controller
+			C:SE:SLAVE:<spi-id>:<slave-id>:<slave-pin>
+				<spi-id>: the id that will be / was assigned to the spi controller (beware this is predifiened like VSPI or HSPI (ESP32), if only one spi is present the id should be 0) (esp32: HSPI = 2 / VSPI = 3)
 				<slave-id>: the id that will be / was assigned to the slave device
 				<miso-pin>: the pin on which the miso output of the uC is located (spi dependent)
 				<mosi-pin>: the pin on which the mosi output of the uC is located (spi dependent)
 				<clock-pin>: the pin on which the clock output of the uC is located (spi dependent)
 				<speed>: the speed which the spi controller should use to transfer data in Hz
+				<bitorder>: the bitorder of the transfer MSBFIRST (1) or LSBFIRST (0) 
 				<mode>: to the set tranfer mode (0,1,2,3)
 				
 					Mode	Clock Polarity (CPOL)	Clock Phase (CPHA)	Output Edge	Data Capture
@@ -85,9 +86,8 @@ command-message:
 	BE:
 	
 		message-structure:
-			C:BS:<spi-id>:<slave-id>
+			C:BS:<spi-id>
 				<spi-id>: id of the spi controller
-				<slave-id>: id of the slave device
 				
 		This will disable the burst read / write mode, defined in the si4432 datasheet
 		
@@ -95,9 +95,8 @@ command-message:
 	BT:
 	
 		message-structure:
-			C:BT:<spi-id>:<slave-id>:<data>
+			C:BT:<spi-id>:<data>
 				<spi-id>: id of the spi controller
-				<slave-id>: id of the slave device
 				<data>: the data that will be send, must have a bitcount of 8 (per transfert 8bits of data)
 				
 
@@ -118,9 +117,10 @@ error-message:
 	
 	message-structure:
 		E:<category>:<id>:<error-text>
+		E:<category>:<id>
 			<category>: the category which produced the error (see error manual)
 			<id>: id of the error (see error manual)
-			<error-text>: text that describes the error
+			<error-text>: text that describes the error [only debug]
 			
 
 response-message:

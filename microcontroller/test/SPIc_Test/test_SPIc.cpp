@@ -64,7 +64,7 @@ void test_SPI_BoundsAndBitcountChecks(){
     TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
     TEST_ASSERT_EQUAL_INT8(SPI_SLAVE_ID_OUT_OF_BOUNDS_ERROR, uinittest_getLastErrorID());
 
-    //is SPI SLAVE ID bound checks
+    //is valid bitcount check
     uinittest_resetErrorUpdatedStatus();
     TEST_ASSERT_TRUE(isValidBitCount(8));
     TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
@@ -73,7 +73,6 @@ void test_SPI_BoundsAndBitcountChecks(){
     TEST_ASSERT_EQUAL_INT8(1, uinittest_getErrorUpdatedCount()); //only one error should be here
     TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
     TEST_ASSERT_EQUAL_INT8(SPI_INVALID_BITCOUNT_ERROR, uinittest_getLastErrorID());
-
     
 }
 

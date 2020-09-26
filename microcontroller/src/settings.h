@@ -25,6 +25,7 @@
 #define NUMBER_OF_SLAVES_PER_SPI 8
 
 //#define DEBUG
+//#define UNIT_TEST_DEBUG
 
 #define UART_SPEED 115200
 

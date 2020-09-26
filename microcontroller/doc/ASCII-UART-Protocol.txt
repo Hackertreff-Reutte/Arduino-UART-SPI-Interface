@@ -86,7 +86,7 @@ command-message:
 	BE:
 	
 		message-structure:
-			C:BS:<spi-id>
+			C:BE:<spi-id>
 				<spi-id>: id of the spi controller
 				
 		This will disable the burst read / write mode, defined in the si4432 datasheet

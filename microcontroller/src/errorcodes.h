@@ -36,17 +36,22 @@
 //system error Strings
 #ifdef DEBUG
 
-
 #endif
 
 
 //parser error IDs
-
+#define PARSER_EMPTY_DATA_ERROR 0
+#define PARSER_INVALID_COMMAND_TYPE_ERROR 1
+#define PARSER_COMMAND_FIELDS_MISSING_ERROR 2
+#define PARSER_BITCOUNT_MISMATCH_ERROR 3
+#define PARSER_INVALID_SETUP_COMMAND_ERROR 4
 
 //parser error Strings
 #ifdef DEBUG
-
-
+static const String PARSER_BITCOUNT_MISMATCH_ERROR_TEXT = "Bitcount does not match data length";
+static const String PARSER_COMMMAND_FIELDS_MISSING_ERROR_TEXT = "Data does not contain enough fields";
+static const String PARSER_INVALID_COMMAND_ERROR_TEXT = "Data is not a valid command";
+static const String PARSER_EMPTY_DATA_ERROR_TEXT = "Data string empty";
 #endif
 
 

@@ -221,7 +221,7 @@ bool isValidBitCount(uint8_t bitcount){
 
       return false;
     }else{
-      true
+      return true;
     }
   #endif
 }

@@ -42,14 +42,19 @@ void sendInformation(String info) {
 #ifdef DEBUG
 //this functions will send a warning message
 void sendWarning(String text) {
+  #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
   Serial.println("W:" + text);
+  #endif
 }
 #endif
 
 //this function will send an error message with a given category and id
 //for the categories and ids please look at the doc
 void sendError(String category, uint8_t id) {
+
+  #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
   Serial.println("E:" + category + ":" + String(id, DEC));
+  #endif
 
   //this is for the unit test framework to check error messages
   #ifdef UNIT_TEST 
@@ -63,7 +68,10 @@ void sendError(String category, uint8_t id) {
 //this function will send an error message with a given category, id and text
 //for the categories and ids please look at the doc
 void sendError(String category, uint8_t id, String text) {
+
+  #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
   Serial.println("E:" + category + ":" + String(id, DEC) + ":" + text);
+  #endif
 
   //this is for the unit test framework to check error messages
   #ifdef UNIT_TEST 
@@ -74,7 +82,10 @@ void sendError(String category, uint8_t id, String text) {
 
 //this function is used to send back the response you get from the spi controller / slave
 void sendRespone(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, String data){
+
+  #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
   Serial.println("R:" + String(spi_id, DEC) + ":" + String(slave_id, DEC) + ":" + String(bitcount, DEC) + ":" + data);
+  #endif
 }
 
 void uartSetup(){

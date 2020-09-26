@@ -33,11 +33,11 @@ echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 #add the settings to the arduino file
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
-echo "//---------Start of the contents from the file errorcodes.h------------" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+echo "//---------Start of the contents from the file statuscodes.h------------" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 
-cat ./src/errorcodes.h &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
+cat ./src/statuscodes.h &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 
 echo "" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino
 echo "//---------End of the contents from the file errorcodes.h------------" &>> ./Arduino_IDE/uart_spi_converter/uart_spi_converter.ino

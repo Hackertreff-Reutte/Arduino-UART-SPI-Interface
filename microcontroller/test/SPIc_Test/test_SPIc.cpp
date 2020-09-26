@@ -20,7 +20,7 @@
 
 #include "unity.h"
 #include "unittest_UART_interceptor.h"
-#include "errorcodes.h"
+#include "statuscodes.h"
 #include "Arduino.h"
 #include "SPIc.h"
 

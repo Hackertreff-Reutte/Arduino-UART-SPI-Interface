@@ -25,7 +25,7 @@
 #include <SPIc.h>
 #include "UART.h"
 #include "settings.h"
-#include "errorcodes.h"
+#include "statuscodes.h"
 
 bool isSpace(char c);
 String trimWhitespaces(String data);

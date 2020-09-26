@@ -24,7 +24,7 @@
 
 #include <Arduino.h>
 #include "settings.h"
-#include "errorcodes.h"
+#include "statuscodes.h"
 
 //header for the testing framework
 #ifdef UNIT_TEST 

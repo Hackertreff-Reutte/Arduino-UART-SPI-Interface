@@ -24,7 +24,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include "settings.h"
-#include "errorcodes.h"
+#include "statuscodes.h"
 #include "UART.h"
 
 void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32_t speed, uint8_t bitorder, uint8_t mode);

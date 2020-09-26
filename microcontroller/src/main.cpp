@@ -19,10 +19,12 @@
 
 #include <Arduino.h>
 
-
+//put here the custom headerfiles (not arduino standard / own header files)
+#ifndef ARDUINO_IDE
 #include "SPIc.h"
 #include "UART.h"
 #include "parser.h"
+#endif
 
 
 

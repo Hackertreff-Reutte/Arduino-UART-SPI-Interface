@@ -31,6 +31,9 @@
 #define SDCARD_ERROR "SDCARD" 
 
 
+//Information Message
+#define SUCCESS "SUCCESS"
+
 
 //system error IDs
 

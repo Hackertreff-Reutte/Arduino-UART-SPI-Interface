@@ -261,6 +261,9 @@ void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32
   spicontrollers[spi_id].mode = mode;
   spicontrollers[spi_id].initialized = true;
 
+  //send success message
+  sendInformation(SUCCESS);
+
 }
 
 void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
@@ -294,6 +297,9 @@ void setupSlave(uint8_t spi_id, uint8_t slave_id, uint8_t pin){
   spicontrollers[spi_id].slaves[slave_id].pin = pin;
   spicontrollers[spi_id].slaves[slave_id].initialized = true;
   
+  //send success message
+  sendInformation(SUCCESS);
+
 }
 
 
@@ -311,6 +317,9 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
 
   spicontrollers[spi_id].mode = mode;
 
+
+  //send success message
+  sendInformation(SUCCESS);
 }
 
 
@@ -327,6 +336,9 @@ void updateSpiSpeed(uint8_t spi_id, uint32_t speed){
   }
 
   spicontrollers[spi_id].speed = speed;
+
+  //send success message
+  sendInformation(SUCCESS);
 }
 
 
@@ -360,6 +372,10 @@ void stopSpi(uint8_t spi_id){
       spicontrollers[spi_id].slaves[i].pin = 0;
     }
   }
+
+
+  //send success message
+  sendInformation(SUCCESS);
 
 }
 
@@ -486,6 +502,9 @@ void startSpiBulkTransfer(uint8_t spi_id, uint8_t slave_id){
   digitalWrite(spicontrollers[spi_id].slaves[slave_id].pin, LOW);
 
   spicontrollers[spi_id].activeSlave = slave_id;
+
+  //send success message
+  sendInformation(SUCCESS);
 }
 
 
@@ -512,6 +531,8 @@ void stopSpiBulkTransfer(uint8_t spi_id){
 
   spicontrollers[spi_id].transmitting = false;
 
+  //send success message
+  sendInformation(SUCCESS);
 }
 
 

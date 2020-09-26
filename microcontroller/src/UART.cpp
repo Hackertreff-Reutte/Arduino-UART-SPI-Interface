@@ -34,7 +34,9 @@
 
 //this functions will send an information message
 void sendInformation(String info) { 
+  #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
   Serial.println("I:" + info);
+  #endif
 }
 
 

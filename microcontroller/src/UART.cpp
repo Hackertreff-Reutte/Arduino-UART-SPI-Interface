@@ -83,10 +83,10 @@ void sendError(String category, uint8_t id, String text) {
 #endif
 
 //this function is used to send back the response you get from the spi controller / slave
-void sendRespone(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, String data){
+void sendRespone(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, uint32_t data, uint8_t number_base){
 
   #if !defined(UNIT_TEST) || defined(UNIT_TEST_DEBUG)
-  Serial.println("R:" + String(spi_id, DEC) + ":" + String(slave_id, DEC) + ":" + String(bitcount, DEC) + ":" + data);
+  Serial.println("R:" + String(spi_id, number_base) + ":" + String(slave_id, number_base) + ":" + String(bitcount, number_base) + ":" + String(data, number_base));
   #endif
 }
 

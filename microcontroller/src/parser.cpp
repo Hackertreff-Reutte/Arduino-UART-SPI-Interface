@@ -59,17 +59,10 @@ void getCommand(String data){
           uint8_t bitcount = commandinfo[4].toInt();
           uint32_t txdata = commandinfo[5].toInt();
 
-          if(true){
-            transfer(spi_id, slave_id, bitcount, txdata); // TODO: add bitcount check here
-          }
-          else{
-            // bitcount does not match size of data transfered
-            #ifndef DEBUG
-              sendError(PARSER_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR);
-            #else
-              sendError(PARSER_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR_TEXT);
-            #endif
-          }
+          
+          uint32_t response = transfer(spi_id, slave_id, bitcount, txdata); 
+          sendRespone(spi_id, slave_id, bitcount, response, DEC);
+          
         }
         else{
             // not enough fields for transfer command

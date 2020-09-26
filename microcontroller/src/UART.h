@@ -43,5 +43,6 @@ void sendInformation(String info);
 void sendError(String category, uint8_t id);
 void sendRespone(uint8_t spi_id, uint8_t slave_id, uint8_t bitcount, String data);
 void uartSetup();
+String pullUART();
 
 #endif

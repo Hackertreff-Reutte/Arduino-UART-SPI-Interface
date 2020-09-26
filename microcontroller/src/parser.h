@@ -23,7 +23,7 @@
 
 #include <Arduino.h>
 #include <SPIc.h>
-#include <UART.h>
+#include "UART.h"
 #include "settings.h"
 #include "errorcodes.h"
 

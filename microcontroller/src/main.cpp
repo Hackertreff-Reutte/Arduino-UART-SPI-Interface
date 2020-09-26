@@ -19,14 +19,24 @@
 
 #include <Arduino.h>
 
-//this ifndef is just here for a script to create a single main file (used by the arduino ide) and to not include non-existend files 
-#ifndef ARDUINO_IDE
+
 #include "SPIc.h"
 #include "UART.h"
-#endif
+#include "parser.h"
 
 
 
+
+void pullCommands(){
+        String data = pullUART();
+        if(data.equalsIgnoreCase("")){
+                //no new data was found
+                return;
+        }else{
+                //this will parse the command
+                getCommand(data);
+        }
+}
 
 
 //this is an importanted guard for the unit testing framework (otherwise multiple definitions)
@@ -34,10 +44,14 @@
 
 void setup() {
 
+        uartSetup();
 
 }
 
 void loop() {
+
+        delay(100);
+        pullCommands();
   
 }
 

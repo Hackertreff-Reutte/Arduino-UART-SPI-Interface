@@ -99,3 +99,14 @@ void uartSetup(){
   }
 }
 
+
+String pullUART(){
+
+  if(Serial.available() > 0){
+    //new command is incomming
+    String data = Serial.readStringUntil('\n');
+    return data;
+  }else{
+    return "";
+  }
+}

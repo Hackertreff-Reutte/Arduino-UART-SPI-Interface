@@ -5,151 +5,212 @@
 #include <Arduino.h>
 #endif
 
-
 //--------------Serial Communication Parser-----------------------
-// this function defines what is considered a whitespace
-bool isSpace(char c) {
- 	return (c == ' ' || c == '\n' || c == '\r' ||
-		   c == '\t' || c == '\v' || c == '\f');
-}
-
-// this function removes all whitespaces in front of another charecter
-String trimWhitespaces(String data){
-   String temp = data;
- 
-   if(!temp.length() == 0){
-     for (int i = 0; i < temp.length(); i++)
-     {
-       if(!isSpace(temp.charAt(0))){
-         return "";
-       }
-       else{
-         temp.remove(0);
-       }
-     }
-   }
-   return temp;
-}
-
 // this function splits the data by the given separator and returns it using a String array
-String* getCommandInfo(String data, char separator)
+void getCommandInfo(String dataIn, char separator, String dataOut[])
 {
-    String info[10]; // changes here to max number of seperated fields that are allowed
-
     int section = 0;
     int lastSeperator = 0;
-    for (int i = 0; i <= data.length(); i++) {
-        if (data.charAt(i) == separator) {
-            info[section] = data.substring(lastSeperator + 1, i);
+    for (int i = 0; i <= dataIn.length(); i++) {
+        if (dataIn.charAt(i) == separator) {
+            dataOut[section] = dataIn.substring(lastSeperator + 1, i);
             lastSeperator = i;
+            section++;
         }
     }
-    return info;
+    dataOut[section] = (lastSeperator + 1, dataIn.length());
 }
-
 
 //will try to get the command from the data string if any is present
 void getCommand(String data){
-
-  // remove whitespaces infront of other characters 
-  String preprocessed = trimWhitespaces(data);
   
-  if(preprocessed.length() != 0){
+  if(data.length() != 0){
     // check if first character is a C otherwise data is no command
-    if(preprocessed.charAt(0) == 'C'){ 
+    if(data.charAt(0) == 'C'){ 
       // split command
-      String * commandinfo = getCommandInfo(preprocessed, ':');
+      String commandinfo[10]; // change here to max number of fields possible
+      getCommandInfo(data, ':', commandinfo);
 
       // parse according to command type
       if(commandinfo[1] == "TX"){
         if(commandinfo[5] != NULL){
-          uint32_t spi_id = commandinfo[2].toInt();
-          uint32_t slave_id = commandinfo[3].toInt();
-          uint32_t bitcount = commandinfo[4].toInt();
+          uint8_t spi_id = commandinfo[2].toInt();
+          uint8_t slave_id = commandinfo[3].toInt();
+          uint8_t bitcount = commandinfo[4].toInt();
           uint32_t txdata = commandinfo[5].toInt();
 
-          if(txdata == bitcount){
-            transfer(spi_id, slave_id, bitcount, txdata);
+          if(true){
+            transfer(spi_id, slave_id, bitcount, txdata); // TODO: add bitcount check here
           }
           else{
-            // sendError("parser", "P3", "Bitcount does not match data length" );
+            // bitcount does not match size of data transfered
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR, PARSER_BITCOUNT_MISMATCH_ERROR_TEXT);
+            #endif
           }
         }
         else{
-          // sendError("parser", "P2", "Data does not contain enough fields for valid TX command");
+            // not enough fields for transfer command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
         }
       }
-      else if("SE"){
+      else if(commandinfo[1] == "SE"){
         if(commandinfo[2] == "SPI"){
           if(commandinfo[9] != NULL){
-            uint32_t spi_id = commandinfo[3].toInt();
-            uint32_t miso = commandinfo[4].toInt();
-            uint32_t mosi = commandinfo[5].toInt();
-            uint32_t clock = commandinfo[6].toInt();
+            uint8_t spi_id = commandinfo[3].toInt();
+            uint8_t miso = commandinfo[4].toInt();
+            uint8_t mosi = commandinfo[5].toInt();
+            uint8_t clock = commandinfo[6].toInt();
             uint32_t speed = commandinfo[7].toInt();
-            uint32_t bitorder = commandinfo[8].toInt();
-            uint32_t mode = commandinfo[9].toInt();
+            uint8_t bitorder = commandinfo[8].toInt();
+            uint8_t mode = commandinfo[9].toInt();
             setupSPI(spi_id, miso, mosi, clock, speed, bitorder, mode);
           }
           else{
-            // sendError("parser", "P2, "Data does not contain enough fields for valid SE:SPI command");
+            // not enough fields for setup spi command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
           }
         }
         else if(commandinfo[2] == "MODE"){
           if(commandinfo[4] != NULL){
-            uint32_t spi_id = commandinfo[3].toInt();
-            uint32_t mode = commandinfo[4].toInt();
+            uint8_t spi_id = commandinfo[3].toInt();
+            uint8_t mode = commandinfo[4].toInt();
             updateSpiMode(spi_id, mode);
           }
           else{
-            // sendError("parser", "P2", "Data does not contain enough fields for valid SE:MODE command");
+            // not enough fields for setup mode command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
           }
         }
         else if(commandinfo[2] == "SPEED"){
           if(commandinfo[4] != NULL){
-            uint32_t spi_id = commandinfo[3].toInt();
+            uint8_t spi_id = commandinfo[3].toInt();
             uint32_t speed = commandinfo[4].toInt();
             updateSpiSpeed(spi_id, speed);
           }
           else{
-            // sendError("parser", "P2", "Data does not contain enough fields for valid SE:SPEED command");
+            // not enough fields for setup speed command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
           }
         }
         else if(commandinfo[2] == "SLAVE"){
           if(commandinfo[5] != NULL){
-            uint32_t spi_id = commandinfo[3].toInt();
-            uint32_t slave_id = commandinfo[4].toInt();
-            uint32_t pin = commandinfo[5].toInt();
+            uint8_t spi_id = commandinfo[3].toInt();
+            uint8_t slave_id = commandinfo[4].toInt();
+            uint8_t pin = commandinfo[5].toInt();
             setupSlave(spi_id, slave_id, pin);
           }
           else{
-            // sendError("parser", "P2", "Data does not contain enough fields for valid SE:SLAVE command");
+            // not enough fields for setup speed command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
           }
         }
         else{
-        // sendError("parser", "P4", "Invalid setup command");
+            // not a valid setup command type
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_INVALID_SETUP_COMMAND_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_INVALID_SETUP_COMMAND_ERROR, PARSER_INVALID_COMMAND_ERROR);
+            #endif
         }
       }
-      else if("ST"){
-      Serial.write("Call st function");
+      else if(commandinfo[1] == "ST"){
+        if(commandinfo[2] != NULL){
+          uint8_t spi_id = commandinfo[2].toInt();
+          stopSpi(spi_id);
+        }
+        else{
+            // not enough fields for spi stop command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
+          }
       }
-      else if("BS"){
-      Serial.write("Call bs function");
+      else if(commandinfo[1] == "BS"){
+        if(commandinfo[3] != NULL){
+          uint8_t spi_id = commandinfo[2].toInt();
+          uint8_t slave_id = commandinfo[3].toInt();
+          startSpiBulkTransfer(spi_id, slave_id);
+        }
+        else{
+            // not enough fields for burst transfer start command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
+          }
       }
-      else if("BE"){
-      Serial.write("Call be function");
+      else if(commandinfo[1] == "BE"){
+        if(commandinfo[2] != NULL){
+          uint8_t spi_id = commandinfo[2].toInt();
+          stopSpiBulkTransfer(spi_id);
+        }
+        else{
+            // not enough fields for burst transfer start command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
+          }
       }
-      else if("BT"){
-      Serial.write("Call bt function");
+      else if(commandinfo[1] == "BT"){
+        if(commandinfo[3] != NULL){
+          uint8_t spi_id = commandinfo[2].toInt();
+          uint8_t data = commandinfo[3].toInt();
+          bulkTransfer(spi_id, data);
+        }
+        else{
+            // not enough fields for burst transfer start command
+            #ifndef DEBUG
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR);
+            #else
+              sendError(PARSER_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR, PARSER_COMMAND_FIELDS_MISSING_ERROR_TEXT);
+            #endif
+          }
       }
     }
     else{
-      // no valid command
-      //sendError("parser", "P1", "Data is not a valid command");
+      // no valid command type
+      #ifndef DEBUG
+        sendError(PARSER_ERROR, PARSER_INVALID_COMMAND_TYPE_ERROR);
+      #else
+        sendError(PARSER_ERROR, PARSER_INVALID_COMMAND_TYPE_ERROR, PARSER_INVALID_COMMAND_ERROR);
+      #endif
     }
   }
   else{
-    //sendError("parser", "P0", "Empty data");
+    // data string empty
+    #ifndef DEBUG
+      sendError(PARSER_ERROR, PARSER_EMPTY_DATA_ERROR);
+    #else
+      sendError(PARSER_ERROR, PARSER_EMPTY_DATA_ERROR, PARSER_EMPTY_DATA_ERROR_TEXT);
+    #endif
   }
   
 }

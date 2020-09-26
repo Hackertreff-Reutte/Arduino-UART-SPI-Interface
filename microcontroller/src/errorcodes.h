@@ -20,7 +20,9 @@
 #ifndef ERRORCODES_H
 #define ERRORCODES_H
 
+#ifndef ARDUINO_IDE
 #include "settings.h"
+#endif
 
 //error categories 
 #define SYSTEM_ERROR "SYSTEM"

@@ -49,6 +49,8 @@ bool isSPI_Slave_Initialized(uint8_t spi_id, uint8_t slave_id);
 bool isSPI_notTransmitting(uint8_t spi_id);
 bool isSPI_Transmitting(uint8_t spi_id);
 bool isValidBitCount(uint8_t bitcount);
+bool isValidMode(uint8_t mode);
+bool isValidBitorder(uint8_t bitorder);
 #endif
 
 

@@ -76,6 +76,30 @@ void test_SPI_BoundsAndBitcountChecks(){
     
 }
 
+void test_SPI_bitorderAndModeCheck(){
+
+    //check the Mode function
+    uinittest_resetErrorUpdatedStatus();
+    TEST_ASSERT_TRUE(isValidMode(3));
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_FALSE(isValidMode(4));
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_INT8(1, uinittest_getErrorUpdatedCount()); //only one error should be here
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_INVALID_MODE_ERROR, uinittest_getLastErrorID());
+
+
+    //check the bitorder
+    uinittest_resetErrorUpdatedStatus();
+    TEST_ASSERT_TRUE(isValidBitorder(1));
+    TEST_ASSERT_FALSE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_FALSE(isValidBitorder(2));
+    TEST_ASSERT_TRUE(uinittest_wasErrorUpdated());
+    TEST_ASSERT_EQUAL_INT8(1, uinittest_getErrorUpdatedCount()); //only one error should be here
+    TEST_ASSERT_EQUAL_STRING(SPI_ERROR, uinittest_getLastErrorCategory().c_str());
+    TEST_ASSERT_EQUAL_INT8(SPI_INVALID_BITORDER_ERROR, uinittest_getLastErrorID());
+}
+
 
 void test_SPI_InitializedChecks(){
 
@@ -197,6 +221,7 @@ void setup(){
     UNITY_BEGIN();    // IMPORTANT LINE!
 
     RUN_TEST(test_SPI_BoundsAndBitcountChecks);
+    RUN_TEST(test_SPI_bitorderAndModeCheck);
     RUN_TEST(test_SPI_InitializedChecks);
     RUN_TEST(test_SPI_Slave_InitializedChecks);
     RUN_TEST(test_SPI_transmittingChecks);

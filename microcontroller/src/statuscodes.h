@@ -70,6 +70,8 @@ static const String PARSER_EMPTY_DATA_ERROR_TEXT = "Data string empty";
 #define SPI_IS_IN_TRANSACTION_ERROR 6
 #define SPI_NO_ACTIVE_TRANSACTION_ERROR 7
 #define SPI_INVALID_BITCOUNT_ERROR 8
+#define SPI_INVALID_BITORDER_ERROR 9
+#define SPI_INVALID_MODE_ERROR 10
 
 
 //spi error Strings
@@ -82,8 +84,9 @@ static const String SPI_SLAVE_NOT_INITIALIZED_TEXT = "SPI slave not initialized"
 static const String SPI_SLAVE_ALREADY_INITIALIZED_TEXT = "SPI slave already initialized";
 static const String SPI_IS_IN_TRANSACTION_ERROR_TEXT = "Error due to the SPI being in a transaction";
 static const String SPI_NO_ACTIVE_TRANSACTION_ERROR_TEXT = "Error there is no active transaction";
-static const String SPI_INVALID_BITCOUNT_ERROR_TEXT = "Error not a vaild bitcount";
-
+static const String SPI_INVALID_BITCOUNT_ERROR_TEXT = "Invaild bitcount";
+static const String SPI_INVALID_BITORDER_ERROR_TEXT = "Invaild bitorder"
+static const String SPI_INVALID_MODE_ERROR_TEXT = "Invaild mode"
 #endif
 
 

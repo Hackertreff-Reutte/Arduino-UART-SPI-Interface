@@ -227,6 +227,37 @@ bool isValidBitCount(uint8_t bitcount){
 }
 
 
+bool isValidMode(uint8_t mode){
+  if(mode > 3){
+     //send error invalid mode
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_INVALID_MODE_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_INVALID_MODE_ERROR, SPI_INVALID_MODE_ERROR_TEXT);
+    #endif
+
+    return false;
+  }else{
+    return true;
+  }
+}
+
+
+bool isValidBitorder(uint8_t bitorder){
+  if(bitorder > 1){
+     //send error invalid bitorder
+    #ifndef DEBUG
+      sendError(SPI_ERROR, SPI_INVALID_BITORDER_ERROR);
+    #else
+      sendError(SPI_ERROR, SPI_INVALID_BITORDER_ERROR, SPI_INVALID_BITORDER_ERROR_TEXT);
+    #endif
+
+    return false;
+  }else{
+    return true;
+  }
+}
+
 void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32_t speed, uint8_t bitorder, uint8_t mode){
 
   
@@ -237,6 +268,16 @@ void setupSPI(uint8_t spi_id, uint8_t miso, uint8_t mosi, uint8_t clock,  uint32
 
   //check if the spi is already initialized
   if(isSPI_notInitialized(spi_id) == false){
+    return;
+  }
+
+  //check if the mode is valid
+  if(isValidMode(mode) == false){
+    return;
+  }
+
+  //check if bitorder is valid
+  if(isValidBitorder(bitorder) == false){
     return;
   }
 
@@ -312,6 +353,11 @@ void updateSpiMode(uint8_t spi_id, uint8_t mode) {
 
   //check if the spi free and not transmitting
   if(isSPI_notTransmitting(spi_id) == false){
+    return;
+  }
+
+  //check if the mode is valid
+  if(isValidMode(mode) == false){
     return;
   }
 
